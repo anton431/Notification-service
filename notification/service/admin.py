@@ -9,8 +9,8 @@ class MailingAdmin(admin.ModelAdmin):
     list_filter = ('tag', 'mobile_code')
 
 class ClientAdmin(admin.ModelAdmin):
-    list_display = ('id', 'mobile_code', 'tag', 'timezone')
-    list_display_links = ('id',)
+    list_display = ('id', 'mobile_code', 'phone', 'tag', 'timezone')
+    list_display_links = ('id', 'phone')
 
 class MessageAdmin(admin.ModelAdmin):
     list_display = ('id', 'date_creation', 'status', 'mailing', 'client')

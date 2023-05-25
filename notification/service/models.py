@@ -9,7 +9,7 @@ class Mailing(models.Model):
     mobile_code = models.CharField("Код мобильного оператора", max_length=3, blank=True)
 
     def __str__(self):
-        return self.text
+        return str(self.pk)
 
     def total_sent(self):
         return self.messages.filter(status='sent').count()
@@ -42,11 +42,11 @@ STATUS_CHOICES = (
 class Message(models.Model):
     date_creation = models.DateTimeField("Время создания", auto_now_add=True)
     status = models.CharField("Статус", choices=STATUS_CHOICES, max_length=15)
-    mailing = models.ForeignKey(Mailing, on_delete=models.CASCADE, related_name='messages')
-    client = models.ForeignKey(Client, on_delete=models.CASCADE, related_name='messages')
+    mailing = models.ForeignKey(Mailing, on_delete=models.CASCADE, related_name='messages', verbose_name='Рассылка')
+    client = models.ForeignKey(Client, on_delete=models.CASCADE, related_name='messages', verbose_name='Клиент')
 
     def __str__(self):
-        return f"ID собщения {self.id}: Cтатус {self.status}, номер телефона клиента {self.client}"
+        return f"ID собщения {self.pk}: Cтатус {self.status}, номер телефона клиента {self.client}"
 
     class Meta:
         verbose_name = "Сообщение"
