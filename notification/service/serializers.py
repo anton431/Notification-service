@@ -12,3 +12,16 @@ class ClientSerializer(serializers.ModelSerializer):
         model = Client
         fields = ('phone', 'mobile_code', 'tag', 'timezone')
 
+class MailingRetrieveSerializer(serializers.ModelSerializer):
+    messages = serializers.StringRelatedField(many=True)
+    class Meta:
+        model = Mailing
+        fields = ('launch_data', 'end_data', 'text', 'tag', 'mobile_code', 'messages')
+
+class MailingListSerializer(serializers.ModelSerializer):
+    total_messeges = serializers.IntegerField()
+    total_sent = serializers.IntegerField()
+    class Meta:
+        model = Mailing
+        fields = ('launch_data', 'end_data', 'text', 'tag', 'total_messeges', 'total_sent')
+
