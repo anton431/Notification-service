@@ -14,11 +14,11 @@ class Mailing(models.Model):
         return str(self.pk)
 
     def clean(self, *args, **kwargs):
-        # run the base validation
-        super(Mailing, self).clean(*args, **kwargs)
-        # Don't allow dates older than now.
+        # Не допускаем время раньше, чем сейчас и запуска.
         if self.end_data < timezone.now():
-            raise ValidationError('Дата окончания рассылки должна быть позже, чем сейчас')
+            raise ValidationError(f'Дата окончания рассылки должна быть позже, чем {timezone.now()}')
+        if self.end_data < self.launch_data:
+            raise ValidationError(f'Дата окончания рассылки должна быть позже, чем дата запуска')
 
     @property
     def need_to_send(self):

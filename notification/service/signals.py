@@ -9,7 +9,7 @@ from service.utils import send_massages
 def del_message(instance, **kwargs):
     # перед обновлением будут удаляться старые, при условии, что сообщения не были отпралены
     old_mailing = Mailing.objects.filter(id=instance.pk).first()
-    if not old_mailing.need_to_send:
+    if (old_mailing is not None) and (not old_mailing.need_to_send):
         Message.objects.filter(mailing_id=instance.pk).delete()
 
 @receiver(post_save, sender=Mailing)
