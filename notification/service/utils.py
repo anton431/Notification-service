@@ -8,13 +8,25 @@ header = {
             "Content-Type": "application/json",
         }
 
-def send_massages(mailing_id):
+def send_messages(mailing_id, data_set):
     mailing = Mailing.objects.filter(id=mailing_id).first() # для проверки, что рассылка еще не удалена
+    print('Выполняется')
     if mailing:
+        print('mailing существует')
         if mailing.need_to_send:
-            clients = Client.objects.filter(mobile_code=mailing.mobile_code, tag=mailing.tag)  # если рассылку изменили и сообщения другим
-            for client in clients:
-                message = Message.objects.filter(mailing_id=mailing.id, client_id=client.id).first() # если рассылку изменили и сообщения другим
-                data = {"id": message.pk, "phone": client.phone, "text": mailing.text}
-                req = requests.post(url=f'https://probe.fbrq.cloud/v1/send/{mailing.pk}', headers=header, json=data)
+            print('mailing надо отправить')
+            for client in data_set['clients']:
+                mesage_id = data_set['client_set'][client.pk]
+                data = {"id": mesage_id, "phone": int(client.phone), "text": mailing.text}
+                print(data)
+                req = requests.post(url=f'https://probe.fbrq.cloud/v1/send/{mesage_id}', headers=header, json=data)
+                print(req)
                 print(req.json())
+                Message.objects.filter(id=mesage_id).update(status='sent')
+                print(mesage_id)
+            print(f'Рассылка {mailing_id} произведена успешно')
+        else:
+            # попытаться отправить позже
+            print(f'Рассылка {mailing_id} в ожидании')
+    else:
+        print(f'Рассылка {mailing_id} была удалена')
