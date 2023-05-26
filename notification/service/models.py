@@ -1,4 +1,6 @@
 from django.db import models
+from django.utils import timezone
+from django.core.exceptions import ValidationError
 
 
 class Mailing(models.Model):
@@ -10,6 +12,17 @@ class Mailing(models.Model):
 
     def __str__(self):
         return str(self.pk)
+
+    def clean(self, *args, **kwargs):
+        # run the base validation
+        super(Mailing, self).clean(*args, **kwargs)
+        # Don't allow dates older than now.
+        if self.end_data < timezone.now():
+            raise ValidationError('Дата окончания рассылки должна быть позже, чем сейчас')
+
+    @property
+    def need_to_send(self):
+        return self.launch_data <= timezone.now() <= self.end_data
 
     def total_sent(self):
         return self.messages.filter(status='sent').count()
@@ -35,7 +48,7 @@ class Client(models.Model):
 
 STATUS_CHOICES = (
     ('sent', 'Отправлено'),
-    ('no_sent', 'Не отправлено')
+    ('waiting', 'В ожидании')
 )
 
 
