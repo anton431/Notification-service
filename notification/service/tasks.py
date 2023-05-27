@@ -1,3 +1,4 @@
+import logging
 import os
 import requests
 
@@ -10,26 +11,27 @@ header = {
             "Content-Type": "application/json",
         }
 
-@app.task
-def send_messages(mailing_id, data_set):
-    mailing = Mailing.objects.filter(id=mailing_id).first() # для проверки, что рассылка еще не удалена
+@app.task(bind=True)
+def send_messages(self, mailing_id, data_set):
+    mailing = Mailing.objects.filter(id=mailing_id).first() # для проверки, что рассылка еще не удалена или не изменена
     print('Выполняется')
-    if mailing:
+    if mailing: # если рассылка существует
         print('mailing существует')
-        if mailing.need_to_send:
-            print('mailing надо отправить')
-            clients = Client.objects.filter(mobile_code=mailing.mobile_code, tag=mailing.tag)
-            for client in clients:
-                mesage_id = data_set[client.pk]
+        clients = Client.objects.filter(mobile_code=mailing.mobile_code, tag=mailing.tag)
+        for client in clients:
+            if f'{client.id}' in data_set: # сообщение не отправлено
+                mesage_id = data_set[f'{client.id}']
                 data = {"id": mesage_id, "phone": int(client.phone), "text": mailing.text}
-                req = requests.post(url=f'https://probe.fbrq.cloud/v1/send/{mesage_id}', headers=header, json=data)
-                print(req)
-                print(req.json())
-                Message.objects.filter(id=mesage_id).update(status='sent')
-            print(f'Рассылка {mailing_id} произведена успешно')
-        else:
-            # попытаться отправить позже
-            send_messages.delay(mailing_id, data_set)
-            print(f'Рассылка {mailing_id} в ожидании')
+                try:
+                    response = requests.post(url=f'https://probe.fbrq.cloud/v1/send/{mesage_id}', headers=header, json=data).json()
+                    print(response)
+                    print(response.json())
+                    if response.json() == {'code': 0, 'message': 'OK'} and response.ok:
+                        data_set[f'{client.id}'].delete() # сообщение отправлено, удалил
+                        Message.objects.filter(id=mesage_id).update(status='sent')
+                except Exception as ex:
+                    logging.info(repr(ex))
+        if data_set:
+            raise self.retry(exc='error', countdown=60 * 60)
     else:
-        print(f'Рассылка {mailing_id} не существует')
+        return f'Рассылка {mailing_id} не существует'

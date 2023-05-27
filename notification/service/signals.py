@@ -19,7 +19,7 @@ def signal_message(sender, instance, created, **kwargs):
     data_set = dict()
     for client in clients:
         mesage = Message.objects.create(status="waiting", client_id=client.pk, mailing_id=instance.pk)
-        data_set[client.pk] = mesage.pk
-    send_messages.apply_async(instance.id, data_set)
+        data_set[client.id] = mesage.pk
+    send_messages.apply_async((instance.id, data_set), eta=instance.launch_data, expires=instance.end_data)
 
 
