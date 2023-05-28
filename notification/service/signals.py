@@ -9,7 +9,7 @@ from service.tasks import send_messages
 def del_message(instance, **kwargs):
     # перед обновлением будут удаляться старые, при условии, что сообщения не были отпралены
     old_mailing = Mailing.objects.filter(id=instance.pk).first()
-    if old_mailing is not None:
+    if old_mailing:
         Message.objects.filter(mailing_id=old_mailing.pk, status='waiting').delete()
 
 @receiver(post_save, sender=Mailing)
