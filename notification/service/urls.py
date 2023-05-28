@@ -4,8 +4,8 @@ from service.views import MailingDetailAPIView, MailingCreateAPIView, ClientDeta
     MailingRetrieveAPIView, MailingListAPIView
 
 urlpatterns = [
-    path('api/v1/mailing/change/<int:pk>/', MailingDetailAPIView.as_view()),  # обновление/удаление рассылке
-    path('api/v1/mailing/create/', MailingCreateAPIView.as_view()),  # создание рассылке
+    path('api/v1/mailing/change/<int:pk>/', MailingDetailAPIView.as_view()),  # обновление/удаление рассылки
+    path('api/v1/mailing/create/', MailingCreateAPIView.as_view()),  # создание рассылки
     path('api/v1/client/change/<int:pk>/', ClientDetailAPIView.as_view()),  # обновление/удаление клиента
     path('api/v1/client/create/', ClientCreateAPIView.as_view()),  # создание клиента
     # получения детальной статистики отправленных сообщений по конкретной рассылке

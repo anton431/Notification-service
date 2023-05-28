@@ -20,10 +20,6 @@ class Mailing(models.Model):
         if self.end_data < self.launch_data:
             raise ValidationError(f'Дата окончания рассылки должна быть позже, чем дата запуска')
 
-    @property
-    def need_to_send(self):
-        return self.launch_data <= timezone.now() <= self.end_data
-
     def total_sent(self):
         return self.messages.filter(status='sent').count()
 
