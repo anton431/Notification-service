@@ -57,5 +57,3 @@ services:
       - rebbitmq
       - web
       - celery
-
-asx
