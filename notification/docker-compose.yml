@@ -58,3 +58,4 @@ services:
       - web
       - celery
 
+asx
