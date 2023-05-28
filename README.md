@@ -32,7 +32,7 @@ TOKEN — токен.<br>
 ```
 git clone https://github.com/anton431/notification_service
 ```
-2. Установите все необходимые зависимости:
+2. Установите все необходимые зависимости  и файл .env:
 ```
 pip install -r requirements.txt
 ```
