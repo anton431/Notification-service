@@ -57,4 +57,3 @@ services:
       - rebbitmq
       - web
       - celery
-
