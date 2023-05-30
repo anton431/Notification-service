@@ -4,7 +4,7 @@
 ## Стек технологий
 
 >Язык: __Python 3__<br>
-Web фремворк: __Django & DRF__<br>
+Web framework: __Django & DRF__<br>
 База данных: __PostgreSQL__<br>
 
 Другое: Docker, Swagger, celery
