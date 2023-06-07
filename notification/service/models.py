@@ -42,13 +42,14 @@ class Client(models.Model):
         verbose_name_plural = "Клиенты"
 
 
-STATUS_CHOICES = (
-    ('sent', 'Отправлено'),
-    ('waiting', 'В ожидании')
-)
-
-
 class Message(models.Model):
+    SENT = "sent"
+    WAITING = "waiting"
+
+    STATUS_CHOICES = [
+        (SENT, "Отправлено"),
+        (WAITING, "В ожидании"),
+    ]
     date_creation = models.DateTimeField("Время создания", auto_now_add=True)
     status = models.CharField("Статус", choices=STATUS_CHOICES, max_length=15)
     mailing = models.ForeignKey(Mailing, on_delete=models.CASCADE, related_name='messages', verbose_name='Рассылка')

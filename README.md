@@ -7,7 +7,7 @@
 Web framework: __Django & DRF__<br>
 База данных: __PostgreSQL__<br>
 
-Другое: Docker, Swagger, celery
+Другое: Docker, Swagger, celery, rabbitmq
 
 ## API Views
 
