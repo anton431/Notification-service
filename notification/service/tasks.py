@@ -32,7 +32,7 @@ def send_messages(mailing_id, data_set):
                     if response.json() == {'code': 0, 'message': 'OK'} and response.ok:
                         del data_set[f'{client.id}']  # сообщение отправлено, удалил
                         Message.objects.filter(id=mesage_id).update(status=Message.SENT)
-                except Exception as ex:
+                except requests.exceptions.RequestException as ex:
                     logging.info(repr(ex))
         if data_set:
             return send_messages.apply_async((mailing_id, data_set), countdown=60 * 60)
