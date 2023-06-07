@@ -52,11 +52,14 @@ class Message(models.Model):
     ]
     date_creation = models.DateTimeField("Время создания", auto_now_add=True)
     status = models.CharField("Статус", choices=STATUS_CHOICES, max_length=15)
-    mailing = models.ForeignKey(Mailing, on_delete=models.CASCADE, related_name='messages', verbose_name='Рассылка')
-    client = models.ForeignKey(Client, on_delete=models.CASCADE, related_name='messages', verbose_name='Клиент')
+    mailing = models.ForeignKey(Mailing, on_delete=models.CASCADE,
+                                related_name='messages', verbose_name='Рассылка')
+    client = models.ForeignKey(Client, on_delete=models.CASCADE,
+                               related_name='messages', verbose_name='Клиент')
 
     def __str__(self):
-        return f"ID собщения {self.pk}: Cтатус {self.status}, номер телефона клиента {self.client}"
+        return f"ID собщения {self.pk}: Cтатус {self.status}, " \
+               f"номер телефона клиента {self.client}"
 
     class Meta:
         verbose_name = "Сообщение"

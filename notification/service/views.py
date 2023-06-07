@@ -1,7 +1,11 @@
 from django.db.models import Count
 from rest_framework import generics
+
 from service.models import Mailing, Client
-from service.serializers import MailingSerializer, ClientSerializer, MailingRetrieveSerializer, MailingListSerializer
+from service.serializers import (
+    MailingSerializer, ClientSerializer,
+    MailingRetrieveSerializer, MailingListSerializer
+)
 
 
 class MailingDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
@@ -40,7 +44,8 @@ class ClientCreateAPIView(generics.CreateAPIView):
 
 class MailingRetrieveAPIView(generics.RetrieveAPIView):
     '''
-    Получение детальной статистики отправленных сообщений по конкретной рассылке
+    Получение детальной статистики отправленных сообщений
+    по конкретной рассылке
     '''
     queryset = Mailing.objects.all()
     serializer_class = MailingRetrieveSerializer
