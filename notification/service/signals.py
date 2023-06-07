@@ -7,11 +7,14 @@ from service.tasks import send_messages
 
 @receiver(pre_save, sender=Mailing)
 def del_message(instance, **kwargs):
+    # перед обновлением будут удаляться старые сообщения, при условии, что они не были отпралены
+
     Message.objects.filter(mailing_id=instance.pk, status=Message.WAITING).delete()
 
 @receiver(post_save, sender=Mailing)
 def signal_message(sender, instance, created, **kwargs):
     # при обновлении(изменении тега, кода, текста) и создании рассылки будут создаваться новые сообщения
+
     clients = Client.objects.filter(mobile_code=instance.mobile_code, tag=instance.tag)
     data_set = dict()
     for client in clients:
