@@ -13,7 +13,7 @@ header = {
 @app.task
 def send_messages(mailing_id, data_set):
     mailing = Mailing.objects.filter(id=mailing_id).first()  # для проверки, что рассылка еще не удалена или не изменена
-    msgs = Message.objects.filter(mailing_id=mailing_id, status='waiting')  # для проверки что таска не старая
+    msgs = Message.objects.filter(mailing_id=mailing_id, status=Message.WAITING)  # для проверки что таска не старая
     actual_msgs_id = {msg.id for msg in msgs}
     msgs_id = set(data_set.values())
     if mailing and actual_msgs_id == msgs_id:  # если рассылка существует и таска не старая
@@ -31,7 +31,7 @@ def send_messages(mailing_id, data_set):
                     )
                     if response.json() == {'code': 0, 'message': 'OK'} and response.ok:
                         del data_set[f'{client.id}']  # сообщение отправлено, удалил
-                        Message.objects.filter(id=mesage_id).update(status='sent')
+                        Message.objects.filter(id=mesage_id).update(status=Message.SENT)
                 except Exception as ex:
                     logging.info(repr(ex))
         if data_set:
