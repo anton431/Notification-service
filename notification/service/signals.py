@@ -8,8 +8,8 @@ from service.models import Client, Mailing, Message
 @receiver(pre_save, sender=Mailing)
 def delete_message(instance, **kwargs):
     """
-    Перед обновлением будут удаляться старые сообщения,
-    при условии, что они не были отпралены
+    Old messages will be deleted before the update,
+    provided they have not been sent.
     """
     Message.objects.filter(mailing_id=instance.pk,
                            status=Message.WAITING).delete()
@@ -18,8 +18,8 @@ def delete_message(instance, **kwargs):
 @receiver(post_save, sender=Mailing)
 def update_message(sender, instance, created, **kwargs):
     """
-    При обновлении(изменении тега, кода, текста)
-    и создании рассылки будут создаваться новые сообщения
+    When updating (changing the tag, code, text)
+    and creating a mailing list, new messages will be created.
     """
     clients = Client.objects.filter(mobile_code=instance.mobile_code,
                                     tag=instance.tag)

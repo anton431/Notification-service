@@ -14,7 +14,7 @@ class Mailing(models.Model):
         return str(self.pk)
 
     def clean(self, *args, **kwargs):
-        # Не допускаем время раньше, чем сейчас и запуска.
+        # Do not allow the time earlier than now or the launch time.
         if self.end_data < timezone.now():
             raise ValidationError(f'Дата окончания рассылки должна быть позже, чем {timezone.now()}')
         if self.end_data < self.launch_data:

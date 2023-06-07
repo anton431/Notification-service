@@ -10,42 +10,46 @@ from service.serializers import (
 
 class MailingDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     '''
-    get: Просмотр атрибутов обновляемой/удаляемой рассылки
-    patch: Обновления атрибутов рассылки
-    put: Обновления атрибутов рассылки
-    delete: Удаление рассылки
+    get: Viewing the attributes of the updated/deleted mailing list.
+    patch: Mailing list attribute updates.
+    put: Mailing list attribute updates.
+    delete: Deleting a mailing list.
     '''
     queryset = Mailing.objects.all()
     serializer_class = MailingSerializer
 
 
 class MailingCreateAPIView(generics.CreateAPIView):
-    '''Добавление новой рассылки со всеми её атрибутами'''
+    '''
+    Adding a new mailing list with all its attributes.
+    '''
     queryset = Mailing.objects.all()
     serializer_class = MailingSerializer
 
 
 class ClientDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     '''
-    get: Просмотр атрибутов обновляемого/удаляемого клиента
-    patch: Обновления атрибутов клиента
-    put: Обновления атрибутов клиента
-    delete: Удаление клиента из справочника
+    get: Viewing attributes of the client being updated/deleted.
+    patch: Client attribute updates.
+    put: Client attribute updates.
+    delete: Removing a client from the directory.
     '''
     queryset = Client.objects.all()
     serializer_class = ClientSerializer
 
 
 class ClientCreateAPIView(generics.CreateAPIView):
-    '''Добавления нового клиента в справочник со всеми его атрибутами'''
+    '''
+    Adding a new client to the directory with all its attributes.
+    '''
     queryset = Client.objects.all()
     serializer_class = ClientSerializer
 
 
 class MailingRetrieveAPIView(generics.RetrieveAPIView):
     '''
-    Получение детальной статистики отправленных сообщений
-    по конкретной рассылке
+    Getting detailed statistics of sent messages
+    on a specific mailing list.
     '''
     queryset = Mailing.objects.all()
     serializer_class = MailingRetrieveSerializer
@@ -53,8 +57,8 @@ class MailingRetrieveAPIView(generics.RetrieveAPIView):
 
 class MailingListAPIView(generics.ListAPIView):
     '''
-    Получение общей статистики по созданным рассылкам и
-    количеству отправленных сообщений по ним с группировкой по статусам
+    Getting general statistics on created mailings
+    the number of messages sent on them, grouped by status.
     '''
     queryset = Mailing.objects.annotate(total_messeges=Count('messages'))
     serializer_class = MailingListSerializer
